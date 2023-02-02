@@ -1,0 +1,18 @@
+ Entreprise  -> Digital Service ( E (Demande d'inscription )
+ ->Fiche d'inscription (
+  INFORMATION Perso(Name & Prénom ,Tél,Adress,Email,Ville ,Quartier ,password,)
+  INFORMATION Entreprise( Name ,Raison social ,domain ,Ville ,Quartier,Tél,Adresse,Email,etat)
+ ))
+ Fin de création de l'entreprise
+
+ *Clients (Name , ville ,Tel ,adresse,email,quartier)->Cart_Crédit()->Entreprise()
+
+
+//Une application pour les entreprise
+    les action des entreprises
+
+   -create leurs clients (delete ,update ,create),
+   -create  des carte crédie (create , delete ,modify ,débiter une carte ,créditer une carte  ),
+   -associer une carte de crédie  à un client
+
+//une application pour les utilisateur de l'entreprise,
