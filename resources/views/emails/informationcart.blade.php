@@ -14,13 +14,12 @@
               <div class="col-lg-12">
                        <div class="card">
                            <div class="card-header">
+                         <h4>Les informations de votre carte chez  : {{ $name }}</h4>
                         </div>
 
                                   <div class="card-body">
-                                    <p style="font-weight: bold;">Achat de: {{ $title  }}</p>
-                                    <p style="font-weight: bold;" >Prix: {{ $amount }} FCFA </p>
-                                    <p style="font-weight: bold;" >Chez: {{ $companyName }}</p>
-                                    <p style="font-weight: bold;" > Solde restant: {{ $restant  }}</p>
+                                    <p style="font-weight: bold;" > Numéro de la carte : {{ $number }}</p>
+                                    <p style="font-weight: bold;"> Montant :  {{ $amount }} FCFA</p>
                                   </div>
 
                            <div class="card-footer">
@@ -30,9 +29,5 @@
               </div>
         </div>
 </div>
-
-
-
-
 </body>
 </html>

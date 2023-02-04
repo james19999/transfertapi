@@ -9,24 +9,22 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Transactions extends Mailable
+class Recharge extends Mailable
 {
     use Queueable, SerializesModels;
-     public $amount;
-     public $title;
-     public $companyName;
-     public $restant;
+     public $amountadd;
+     public $solde;
+     public $cartnumer;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($amount,$title,$companyName,$restant)
+    public function __construct($amountadd, $solde,$cartnumer)
     {
-        $this->amount = $amount;
-        $this->title = $title;
-        $this->companyName = $companyName;
-        $this->restant = $restant;
+        $this->amountadd = $amountadd;
+        $this->solde = $solde;
+        $this->cartnumer =$cartnumer;
     }
 
     /**
@@ -37,7 +35,7 @@ class Transactions extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Transaction',
+            subject: 'Recharge',
         );
     }
 
@@ -49,13 +47,12 @@ class Transactions extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.transaction',
-            with: [
-                'amount' => $this->amount->amount,
-                'title' => $this->title->title,
-                'companyName' => $this->companyName->companyName,
-                'restant' => $this->restant->restant,
-            ],
+            view: 'emails.recharge',
+            with:[
+               'amountadd'=>$this->amountadd,
+               'solde'=>$this->solde,
+               'cartnumer'=>$this->cartnumer,
+            ]
         );
     }
 

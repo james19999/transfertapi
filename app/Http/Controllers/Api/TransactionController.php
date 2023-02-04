@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
+use App\Mail\TransactionPay;
 use App\Mail\Transactions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
+
+    //demande d'une transaction par le client connecter pour une autre persconne
     public function new_transaction(Request $request){
         try {
             $valide =Validator::make($request->all(),[
@@ -49,7 +52,7 @@ class TransactionController extends Controller
 
         }
     }
-
+//validation de la transaction par l'entreprise
 
     public function validate_transaction($cartnumber){
           try {
@@ -73,7 +76,7 @@ class TransactionController extends Controller
                     $titles=$transaction->title;
                     $restant=$cart->amount;
                     $mail=$costumercompany->email;
-                    Mail::to($mail)->send(new Transactions($amounts,$titles,$company_name,$restant));
+                    Mail::to($mail)->send(new TransactionPay($amounts,$titles,$company_name,$restant));
                 return Helpers::response("Opération  effectué",true);
 
                  }else{
@@ -86,4 +89,8 @@ class TransactionController extends Controller
               //throw $th;
           }
       }
+
+
+ // get the transaction auth user
+
 }

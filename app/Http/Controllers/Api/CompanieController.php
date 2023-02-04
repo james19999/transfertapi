@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helper\Helpers;
+use App\Mail\Information;
 use App\Models\Companies;
 use Illuminate\Http\Request;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -80,7 +82,7 @@ class CompanieController extends Controller
      }
 
 
-     //create client
+     //create client by companies
 
 
         public function createClient (Request $request) {
@@ -111,6 +113,8 @@ class CompanieController extends Controller
                         return Helpers::response("vous avez un client déjà avec les mêmes informations",false);
 
                          }else{
+                             $company=Companies::findOrfail($user);
+
                              CompanieCostumer::create(['name'=>$request->name,
                              'ville'=>$request->ville,
                              'phone'=>$request->phone,
@@ -118,6 +122,8 @@ class CompanieController extends Controller
                              'quartier'=>$request->quartier,
                              'company_id'=>$user,
                              'identify'=>$request->identify]);
+
+                             Mail::to($request->email)->send(new Information($request->email,$request->identify,$company->name));
                              return Helpers::response("success",false);
 
                          }

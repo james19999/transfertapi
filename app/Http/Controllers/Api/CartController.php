@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helper\Helpers;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Cart;
-use App\Models\Companies;
 use Carbon\Carbon;
+use App\Models\Cart;
+use App\Mail\Retrait;
+use App\Mail\Recharge;
+use App\Helper\Helpers;
+use App\Models\Companies;
+use Illuminate\Http\Request;
+use App\Mail\InformationCart;
+use App\Models\CompanieCostumer;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
@@ -37,6 +42,10 @@ class CartController extends Controller
                             'company_id' =>$request->company_id=$company_auth,
                             'client_id'  =>$request->client_id,
                         ]);
+                        $company=Companies::findOrfail($company_auth);
+                        $clieemail=CompanieCostumer::findOrfail($request->client_id);
+                        Mail::to($clieemail->email)->send(new InformationCart($company->name, $request->code,$request->amount));
+
                         return Helpers::response("success",false);
 
                 }
@@ -98,7 +107,7 @@ class CartController extends Controller
             }
         }
 
-
+//recharger une cart a partie de identifiant de la carte
         public function addamountwithcart(Request $request, $id){
 
                 try {
@@ -106,6 +115,10 @@ class CartController extends Controller
                      ->where('id',$id)->first();
                      if($Carts){
                          $Carts->amount+=$request->amount;
+                         $clieemail=CompanieCostumer::findOrfail($Carts->client_id);
+                         $cartnumer =$Carts->code;
+
+                        Mail::to($clieemail->email)->send(new Recharge($request->amount,$Carts->amount,$cartnumer));
                          $Carts->save();
 
                          return Helpers::response("success",true,$Carts);
@@ -119,6 +132,7 @@ class CartController extends Controller
 
                 }
         }
+        // a revoir après
         public function removeamountwithcart(Request $request, $id){
                 try {
                     $Carts=Cart::where('company_id',Auth::user()->id)
@@ -143,7 +157,7 @@ class CartController extends Controller
                 }
         }
 
-
+//Achat ou retrait d'argent sur la carte a partie du code de la carte pour sacnner au cas ou le client est présent dans a boutique;
         public function verifyCart (Request $request ,$cart_id){
                     try {
 
@@ -154,7 +168,12 @@ class CartController extends Controller
                                 if($companyid->id== $carts->company_id && $carts->amount>= $request->amounts){
 
                                  $carts->amount -=$request->amounts;
+
+                          $clieemail=CompanieCostumer::findOrfail($carts->client_id);
+                           Mail::to($clieemail->email)->send(new Retrait($request->amounts,$carts->amount,$carts->code));
+
                                  $carts->save();
+
                                  return Helpers::response("success",true,$carts);
                                 }else{
                                     return Helpers::response("Le solde de votre carte est insuffisant",false);
