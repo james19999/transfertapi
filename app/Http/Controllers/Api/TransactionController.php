@@ -20,6 +20,7 @@ class TransactionController extends Controller
 {
 
     //demande d'une transaction par le client connecter pour une autre persconne
+    // on dois géner un code transfert qui sera scanner liée à une cart
     public function new_transaction(Request $request){
         try {
             $valide =Validator::make($request->all(),[
@@ -52,7 +53,7 @@ class TransactionController extends Controller
 
         }
     }
-//validation de la transaction par l'entreprise
+//validation de la transaction par l'entreprise  cette fonction est à revoir un peut
 
     public function validate_transaction($cartnumber){
           try {

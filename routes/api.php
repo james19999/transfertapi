@@ -42,7 +42,15 @@ Route::post('verifyCart/{id}',[CartController::class,'verifyCart'])->middleware(
 
 Route::post('login/costumer',[CostumerCompanieController::class,'login_costumer']);
 Route::get('getauthcart',[CostumerCompanieController::class,'getauthcart'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::get('getauthcarttransaction/{code}',[CostumerCompanieController::class,'getauthcarttransaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::get('getalltransaction/{code}',[CostumerCompanieController::class,'getalltransaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::get('gettransactionoffweek/{code}',[CostumerCompanieController::class,'gettransactionoffweek'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::get('gettransactionoffmonth/{code}',[CostumerCompanieController::class,'gettransactionoffmonth'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+
+
 
 //transaction controller
 Route::post('new/transaction',[TransactionController::class,'new_transaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+
+// a revoir pour le metter aussi le montant dans le paramètres
 Route::post('validate/transaction/{cartcode}',[TransactionController::class,'validate_transaction'])->middleware(['auth:sanctum','abilities:companie']);

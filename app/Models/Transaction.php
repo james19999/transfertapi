@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Cart;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
@@ -18,5 +19,8 @@ class Transaction extends Model
     'company_id',
     'cartcode',
   ];
+  public function cart() {
+      return $this->belongsTo(Cart::class,'cart_id');
+  }
 
 }

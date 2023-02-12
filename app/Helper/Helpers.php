@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Response;
 
 class Helpers {
  // response message
-     public static function response(String $message, bool $status,$data=null ,$token=null) {
+     public static function response(String $message, bool $status,$datas=null ,$token=null) {
          return Response::json([
-                'data'=>$data,
+                'datas'=>$datas,
                 'message'=>$message,
                 'token'=>$token,
                 'status'=>$status,
@@ -31,7 +31,8 @@ class Helpers {
      public static function cart_number($length=12){
 
 
-        return str_pad(mt_rand(1,99999999),$length,'0',STR_PAD_LEFT);
+        $c='0123456789';
+        return substr(str_shuffle($c),0,$length);;
       }
 
       public static function getauth () {

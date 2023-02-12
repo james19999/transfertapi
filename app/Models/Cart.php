@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Companies;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cart extends Model
 {
@@ -18,4 +20,12 @@ class Cart extends Model
         'client_id',
         'status',
     ];
+
+    public function company() {
+        return $this->belongsTo(Companies::class, 'company_id');
+    }
+
+    public function transactions() {
+        return $this->hasMany(Transaction::class);
+    }
 }
