@@ -18,6 +18,7 @@ class Transaction extends Model
     'created',
     'company_id',
     'cartcode',
+    'code_tansaction',
   ];
   public function cart() {
       return $this->belongsTo(Cart::class,'cart_id');

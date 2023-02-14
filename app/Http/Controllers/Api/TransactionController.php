@@ -26,6 +26,7 @@ class TransactionController extends Controller
             $valide =Validator::make($request->all(),[
                 'title'          =>'required',
                 'amount'         =>'required',
+                'code_tansaction'         =>'required',
                 // 'cart_id'        =>'required',
                 // 'costumer_id'    =>'required',
                 // 'created'        =>'required',
@@ -37,8 +38,10 @@ class TransactionController extends Controller
                  $user=Auth::user()->id;
                  $usecartid=Cart::where('client_id',$user)->first();
                 Transaction::create([
-                    'title'          =>$request->title,
-                    'amount'         =>$request->amount,
+                    'title' =>$request->title,
+                    // 'status'=>$request->status='peding',
+                    'amount' =>$request->amount,
+                    'code_tansaction' =>$request->code_tansaction,
                     'cart_id'        =>$usecartid->id,
                     'costumer_id'    =>$user,
                     'cartcode'    =>$usecartid->code,
@@ -55,39 +58,98 @@ class TransactionController extends Controller
     }
 //validation de la transaction par l'entreprise  cette fonction est à revoir un peut
 
-    public function validate_transaction($cartnumber){
+    public function validate_transaction($code_tansaction){
           try {
+             //entreprise connecte
             $authcompany=Auth::user()->id;
-            $transaction=Transaction::where('cartcode',$cartnumber)->first();
+            //récuperation du code liée à la transaction
 
-            $cart=Cart::where('code',$transaction->cartcode)->first();
-             if($transaction->status ==false){
+            $transaction=Transaction::where('code_tansaction',$code_tansaction)->first();
+            //verifier si la transaction existe
+            if($transaction){
 
-                 if($transaction->cartcode==$cart->code && $cart->amount>=$transaction->amount){
-                        $cart->amount-=$transaction->amount;
-                        $transaction->status =true;
-                        $transaction->save();
-                        $cart->save();
+                //carte code find
+                $cart=Cart::where('code',$transaction->cartcode)->first();
 
-                  $costumercompany=CompanieCostumer::where('id',$transaction->costumer_id)->first();
-                  $companyname=Companies::where('id',$costumercompany->company_id)->first();
+                //si la transaction existe verifions son etat
+                if($transaction->status =="pending"){
 
-                   $company_name=$companyname->name;
-                    $amounts=$transaction->amount;
-                    $titles=$transaction->title;
-                    $restant=$cart->amount;
-                    $mail=$costumercompany->email;
-                    Mail::to($mail)->send(new TransactionPay($amounts,$titles,$company_name,$restant));
-                return Helpers::response("Opération  effectué",true);
+                    if($transaction->cartcode==$cart->code &&
+                        $cart->amount>=$transaction->amount &&
+                        $authcompany==$transaction->company_id){
+                           $cart->amount-=$transaction->amount;
+                           $transaction->status ="success";
+                           $transaction->save();
+                           $cart->save();
 
-                 }else{
-                      return Helpers::response("Le solde de votre carte est insuffisant pour effectuer cette opération",false);
-                 }
-             }else{
-                return Helpers::response("Opération déjà effectué",false);
-             }
+                     $costumercompany=CompanieCostumer::where('id',$transaction->costumer_id)->first();
+                     $companyname=Companies::where('id',$costumercompany->company_id)->first();
+
+                      $company_name=$companyname->name;
+                       $amounts=$transaction->amount;
+                       $titles=$transaction->title;
+                       $restant=$cart->amount;
+                       $mail=$costumercompany->email;
+                       Mail::to($mail)->send(new TransactionPay($amounts,$titles,$company_name,$restant));
+                   return Helpers::response("Opération  effectué",true);
+
+                    }else{
+                         return Helpers::response("Le solde de votre carte est insuffisant pour effectuer cette opération",false);
+                    }
+                }else{
+                   return Helpers::response("Opération déjà effectué",false);
+                }
+
+            }else{
+                return Helpers::response("Code transaction invalide",false);
+
+            }
+
+
+
+
           } catch (\Throwable $th) {
-              //throw $th;
+            return Helpers::response($th->getMessage(),false);
+
+          }
+      }
+
+   //annuler une transaction par le costumer
+    public function cancel_transaction($code_tansaction){
+          try {
+             //entreprise connecte
+            $authcostumer=Auth::user()->id;
+            //récuperation du code liée à la transaction
+
+            $transaction=Transaction::where('code_tansaction',$code_tansaction)->first();
+            //verifier si la transaction existe
+            if($transaction){
+
+                if($transaction->status =="pending"){
+
+                    if($transaction->costumer_id==$authcostumer){
+                    $transaction->status ="cancelled";
+                    $transaction->save();
+                   return Helpers::response("Transaction annuler",true);
+
+                    }else{
+                         return Helpers::response("Error d 'annulation",false);
+                    }
+                }else{
+                   return Helpers::response("Opération déjà effectué",false);
+                }
+
+            }else{
+                return Helpers::response("Code transaction invalide",false);
+
+            }
+
+
+
+
+          } catch (\Throwable $th) {
+            return Helpers::response($th->getMessage(),false);
+
           }
       }
 

@@ -51,6 +51,7 @@ Route::get('gettransactionoffmonth/{code}',[CostumerCompanieController::class,'g
 
 //transaction controller
 Route::post('new/transaction',[TransactionController::class,'new_transaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::get('cancel/transaction/{codetansaction}',[TransactionController::class,'cancel_transaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 
 // a revoir pour le metter aussi le montant dans le paramètres
-Route::post('validate/transaction/{cartcode}',[TransactionController::class,'validate_transaction'])->middleware(['auth:sanctum','abilities:companie']);
+Route::post('validate/transaction/{codetansaction}',[TransactionController::class,'validate_transaction'])->middleware(['auth:sanctum','abilities:companie']);
