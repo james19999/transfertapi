@@ -25,17 +25,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //companie
 
 Route::post('createcompany',[CompanieController::class,'create_company']);
+Route::get('getcompany',[CompanieController::class,'index']);
 Route::post('logincompany',[CompanieController::class,'login_company']);
 Route::post('create/client/company',[CompanieController::class,'createClient'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('get/client',[CompanieController::class,'get_client'])->middleware(['auth:sanctum','abilities:companie']);
 
+Route::put('Update/Client/{id}',[CompanieController::class,'UpdateClient'])->middleware(['auth:sanctum','abilities:companie']);
+
 //create carte controller
+Route::get('get/cart/with/company/transaction/{cartcode}',[CartController::class,'getcartwithcompanytransaction'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('create/cart',[CartController::class,'create_cart'])->middleware(['auth:sanctum','abilities:companie']);
+Route::post('ActivDesactiveCart/{code}',[CartController::class,'ActivDesactiveCart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::put('edit/cart/{id}',[CartController::class,'edit_cart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('get/cart/with/company',[CartController::class,'getcartwithcompany'])->middleware(['auth:sanctum','abilities:companie']);
-Route::post('add/amount/with/cart/{id}',[CartController::class,'addamountwithcart'])->middleware(['auth:sanctum','abilities:companie']);
+Route::post('add/amount/with/cart/{code}',[CartController::class,'addamountwithcart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('remove/amount/with/cart/{id}',[CartController::class,'removeamountwithcart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('verifyCart/{id}',[CartController::class,'verifyCart'])->middleware(['auth:sanctum','abilities:companie']);
+//logaout company
+Route::post('logout/company',[CompanieController::class,'logout_company'])->middleware(['auth:sanctum','abilities:companie']);
 
 
 //client companie controller
@@ -46,6 +53,7 @@ Route::get('getauthcarttransaction/{code}',[CostumerCompanieController::class,'g
 Route::get('getalltransaction/{code}',[CostumerCompanieController::class,'getalltransaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::get('gettransactionoffweek/{code}',[CostumerCompanieController::class,'gettransactionoffweek'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::get('gettransactionoffmonth/{code}',[CostumerCompanieController::class,'gettransactionoffmonth'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::post('logout/user',[CostumerCompanieController::class,'logout_user'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 
 
 

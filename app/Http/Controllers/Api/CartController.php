@@ -12,20 +12,19 @@ use Illuminate\Http\Request;
 use App\Mail\InformationCart;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
-
+   //create carte
      public function create_cart(Request $request){
            try {
                $validate=Validator::make($request->all(),[
-                'created'    =>'required',
                 'amount'     =>'required',
                 'client_id'  =>'required',
-                // 'code'  =>'required|unique:carts,code',
                ]);
 
                 if($validate->fails()){
@@ -36,17 +35,18 @@ class CartController extends Controller
                         $codes=Helpers::cart_number();
                         Cart::create([
                             'code'       =>$request->code=$codes,
-                            'created'    =>$request->created,
+                            'created'    =>Carbon::now(),
                             'amount'     =>$request->amount,
                             'qrcode'     =>$request->qrcode,
                             'company_id' =>$request->company_id=$company_auth,
                             'client_id'  =>$request->client_id,
+                            'status'  =>$request->status=true,
                         ]);
                         $company=Companies::findOrfail($company_auth);
                         $clieemail=CompanieCostumer::findOrfail($request->client_id);
                         Mail::to($clieemail->email)->send(new InformationCart($company->name, $request->code,$request->amount));
 
-                        return Helpers::response("success",false);
+                        return Helpers::response("success",true);
 
                 }
             } catch (\Throwable $th) {
@@ -55,7 +55,8 @@ class CartController extends Controller
            }
      }
 
-        public function edit_cart(Request $request ,$id){
+     //
+     public function edit_cart(Request $request ,$id){
             try {
                 $validate=Validator::make($request->all(),[
                     'created'    =>'required',
@@ -79,6 +80,7 @@ class CartController extends Controller
                                      'qrcode'     =>$request->qrcode,
                                      'company_id' =>$request->company_id=$company_auth,
                                      'client_id'  =>$request->client_id,
+                                     'status'  =>$request->status,
                                  ]);
                                  return Helpers::response("success",false);
 
@@ -97,7 +99,10 @@ class CartController extends Controller
 
         public function getcartwithcompany(){
             try {
-                $Carts=Cart::where('company_id',Auth::user()->id)->get();
+                $Carts=Cart::where('company_id',Auth::user()->id)->
+                with('client')->orderby('created_at' ,'DESC')
+                ->get();
+
                 return Helpers::response("success",true,$Carts);
 
             } catch (\Throwable $th) {
@@ -106,14 +111,32 @@ class CartController extends Controller
 
             }
         }
+        ///get transcation to day de la carte de du company conncté
+        public function getcartwithcompanytransaction($cartcode){
+            try {
+                $Transaction=Transaction::where('company_id',Auth::user()->id)->
+                 where('cartcode',$cartcode)->orderby('created_at', 'DESC')->where('status',1)->
+                 whereDate('created',Carbon::today())
+                ->get();
 
-//recharger une cart a partie de identifiant de la carte
-        public function addamountwithcart(Request $request, $id){
+                return Helpers::response("success",true,$Transaction);
+
+            } catch (\Throwable $th) {
+                //throw $th;
+                return Helpers::response($th->getMessage(),false);
+
+            }
+        }
+
+//recharger une cart a partie du code de la carte
+        public function addamountwithcart(Request $request, $code){
 
                 try {
                     $Carts=Cart::where('company_id',Auth::user()->id)
-                     ->where('id',$id)->first();
-                     if($Carts){
+                     ->where('code',$code)->first();
+                     $companyid=Companies::findOrfail($Carts->company_id);
+
+                     if($Carts && $Carts->status==true && $companyid->id==$Carts->company_id){
                          $Carts->amount+=$request->amount;
                          $clieemail=CompanieCostumer::findOrfail($Carts->client_id);
                          $cartnumer =$Carts->code;
@@ -124,11 +147,11 @@ class CartController extends Controller
                          return Helpers::response("success",true,$Carts);
 
                      }else{
-                return Helpers::response("cart no existe",false);
+                return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
 
                      }
                 } catch (\Throwable $th) {
-                return Helpers::response($th->getMessage(),false);
+                return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
 
                 }
         }
@@ -137,7 +160,7 @@ class CartController extends Controller
                 try {
                     $Carts=Cart::where('company_id',Auth::user()->id)
                      ->where('id',$id)->first();
-                     if($Carts){
+                     if($Carts && $Carts->status==true){
                            if($Carts->amount>0){
                                $Carts->amount-=$request->amount;
                                $Carts->save();
@@ -148,7 +171,7 @@ class CartController extends Controller
 
 
                      }else{
-                return Helpers::response("cart no existe",false);
+                return Helpers::response("carte n' existe ou elle est bloqué",false);
 
                      }
                 } catch (\Throwable $th) {
@@ -162,7 +185,7 @@ class CartController extends Controller
                     try {
 
                         $carts =Cart::where('code',$cart_id)->where('company_id',Auth::user()->id)->first();
-                         if($carts){
+                         if($carts && $carts->status==true){
                              $companyid=Companies::findOrfail($carts->company_id);
 
                                 if($companyid->id== $carts->company_id && $carts->amount>= $request->amounts){
@@ -176,14 +199,48 @@ class CartController extends Controller
 
                                  return Helpers::response("success",true,$carts);
                                 }else{
-                                    return Helpers::response("Le solde de votre carte est insuffisant",false);
+                                    return Helpers::response("Le solde de votre carte est insuffisant: $carts->amount XOF ",false);
                                 }
                          }else{
-                               return Helpers::response("Carte Crédit not found",false);
+                               return Helpers::response("Carte n'existe pas ou elle à été est bloquer ",false);
                          }
                         //code...
                     } catch (\Throwable $th) {
-                         return Helpers::response($th->getMessage(),false);
+                         return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
+                    }
+          }
+
+          //activé et désactivé une carte
+        public function ActivDesactiveCart($cart_id){
+                    try {
+                        $carts =Cart::where('code',$cart_id)->where('company_id',Auth::user()->id)->first();
+                         if($carts){
+                             $companyid=Companies::findOrfail($carts->company_id);
+
+                                if($companyid->id== $carts->company_id){
+                                     if($carts->status==1){
+                                          $carts->status=0;
+                                          $carts->save();
+                                 return Helpers::response("Carte désactivé",true,$carts);
+
+                                     }else if($carts->status==0) {
+                                        $carts->status=1;
+                                        $carts->save();
+                                 return Helpers::response("Carte activé",true,$carts);
+
+                                     }
+
+                                    }else{
+                                    return Helpers::response("Vous n'est pas l'auteur de cette carte",false,$carts);
+
+                                   }
+                         }else{
+                            return Helpers::response("La carte n'existe pas",false,$carts);
+
+                         }
+                        //code...
+                    } catch (\Throwable $th) {
+                         return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
                     }
           }
 

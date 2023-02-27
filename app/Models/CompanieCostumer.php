@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Cart;
+use App\Models\Companies;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
@@ -23,4 +25,12 @@ class CompanieCostumer extends Authenticatable
         'company_id',
         'identify'
     ];
+
+    public function company() {
+        return $this->belongsTo(Companies::class,'company_id');
+    }
+
+    public function carts () {
+        return $this->hasMany(Cart::class);
+    }
 }

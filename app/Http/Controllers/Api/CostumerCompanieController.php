@@ -76,7 +76,7 @@ class CostumerCompanieController extends Controller
                 // $carts=  Cart::where('client_id',$id)
                 // ->first();
                 $Transactions=Transaction::where('costumer_id',$id)->
-                 where("cartcode",$code)->
+                 where("cartcode",$code)->orderby('created_at', 'DESC')->
                  whereDate('created',Carbon::today())
                 ->get();
                   if ($Transactions) {
@@ -102,7 +102,7 @@ class CostumerCompanieController extends Controller
                 // ->first();
                 $Transactions=Transaction::where('costumer_id',$id)->
                  where("cartcode",$code)->
-                 orderby('created', 'DESC')
+                 orderby('created_at', 'DESC')
                 ->get();
                   if ($Transactions) {
                       # code...
@@ -160,4 +160,31 @@ class CostumerCompanieController extends Controller
               }
 
         }
+
+// logout
+        public  function logout_user(Request $request){
+            $logout=  $request->user()->currentAccessToken()->delete();
+
+            try {
+                    if($logout){
+                        return Response::json([
+                            'status'=>true,
+                            "message"=>"success"
+                        ]);
+
+                    }else{
+                        return Response::json([
+                            'status'=>false,
+                            "message"=>"errors"
+                    ]);
+                    }
+            } catch (\Throwable $th) {
+                return Response::json([
+                    'status'=>false,
+                    "message"=>"$th"
+            ]);
+            }
+
+         }
+
 }

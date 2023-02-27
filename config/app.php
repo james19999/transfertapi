@@ -186,7 +186,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -211,7 +211,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'Helpers'   => 'App\Helper\Helpers'
+        'Helpers'   => 'App\Helper\Helpers',
+        'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];

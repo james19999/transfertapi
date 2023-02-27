@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('qrcode')->nullable();
             $table->string('company_id');
             $table->string('client_id');
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

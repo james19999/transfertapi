@@ -25,7 +25,7 @@ class TransactionController extends Controller
         try {
             $valide =Validator::make($request->all(),[
                 'title'          =>'required',
-                'amount'         =>'required',
+                'amount'         =>'required|numeric',
                 'code_tansaction'         =>'required',
                 // 'cart_id'        =>'required',
                 // 'costumer_id'    =>'required',
@@ -71,8 +71,8 @@ class TransactionController extends Controller
                 //carte code find
                 $cart=Cart::where('code',$transaction->cartcode)->first();
 
-                //si la transaction existe verifions son etat
-                if($transaction->status =="pending"){
+                //si la transaction existe verifions son état
+                if($transaction->status =="pending" && $cart->status ==true){
 
                     if($transaction->cartcode==$cart->code &&
                         $cart->amount>=$transaction->amount &&
@@ -91,13 +91,13 @@ class TransactionController extends Controller
                        $restant=$cart->amount;
                        $mail=$costumercompany->email;
                        Mail::to($mail)->send(new TransactionPay($amounts,$titles,$company_name,$restant));
-                   return Helpers::response("Opération  effectué",true);
+                   return Helpers::response("Opération  effectuée",true);
 
                     }else{
                          return Helpers::response("Le solde de votre carte est insuffisant pour effectuer cette opération",false);
                     }
                 }else{
-                   return Helpers::response("Opération déjà effectué",false);
+                   return Helpers::response("Opération déjà effectué ou la  Carte à été  bloquer",false);
                 }
 
             }else{

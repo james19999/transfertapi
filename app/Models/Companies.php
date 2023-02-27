@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\CompanieCostumer;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,9 +22,14 @@ class Companies extends Authenticatable
         'adress',
         'email',
         'raison',
-        'domaine',
+        'description',
         'password',
         'quartier',
         'status',
+        'img'
     ];
+
+    public function client () {
+        return $this->hasMany(CompanieCostumer::class);
+    }
 }

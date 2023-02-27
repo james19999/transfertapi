@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('adress');
             $table->string('email')->unique();
-            $table->string('raison');
-            $table->string('domaine');
+            $table->string('raison')->nullable();
+            $table->string('description');
+            $table->string('img');
             $table->string('password');
             $table->string('quartier');
             $table->boolean('status')->default(false);
