@@ -3,9 +3,19 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CompanieController;
+use App\Http\Controllers\Api\Pubs\PubController;
+use App\Http\Controllers\Api\CarteEcomController;
+use App\Http\Controllers\Api\AuthanticedController;
+use App\Http\Controllers\Api\Pubs\SliderController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\Mailsend\MailController;
+use App\Http\Controllers\Api\Pubs\PartenaireController;
 use App\Http\Controllers\Api\CostumerCompanieController;
+use App\Http\Controllers\Api\Promotions\PromotionController;
+use App\Http\Controllers\Api\Pageview\PageViewModelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +39,10 @@ Route::get('getcompany',[CompanieController::class,'index']);
 Route::post('logincompany',[CompanieController::class,'login_company']);
 Route::post('create/client/company',[CompanieController::class,'createClient'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('get/client',[CompanieController::class,'get_client'])->middleware(['auth:sanctum','abilities:companie']);
+Route::post('change/Password/Company',[CompanieController::class,'changePasswordCompany'])->middleware(['auth:sanctum','abilities:companie']);
+Route::post('upadate/company/{id}',[CompanieController::class,'upadate_company'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::post('upadate/company/image/{id}',[CompanieController::class,'upadate_company_image'])->middleware(['auth:sanctum','abilities:companie']);
 
 Route::put('Update/Client/{id}',[CompanieController::class,'UpdateClient'])->middleware(['auth:sanctum','abilities:companie']);
 
@@ -63,3 +77,9 @@ Route::get('cancel/transaction/{codetansaction}',[TransactionController::class,'
 
 // a revoir pour le metter aussi le montant dans le paramètres
 Route::post('validate/transaction/{codetansaction}',[TransactionController::class,'validate_transaction'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::post('payement/carte/neworder',[TransactionController::class,'payement']);
+
+
+
+//ecommerce  controller

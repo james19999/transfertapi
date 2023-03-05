@@ -75,6 +75,93 @@ class CompanieController extends Controller
 
 
      }
+    public function upadate_company(Request $request,$id){
+
+         try {
+             //code...
+             $validate=Validator::make($request->all(),[
+                'name'        =>'required',
+                'phone'       =>'required',
+                'adress'      =>'required',
+                'description'      =>'required',
+                'email'       =>'required'      ,
+                // 'raison'      =>'required'      ,
+                // 'domaine'     =>'required'      ,
+
+                'password'    =>'required'      ,
+                'quartier'    =>'required'      ,
+              ]);
+                if ($validate->fails()) {
+
+                    return Helpers::response($validate->getMessageBag(),false,);
+                }else {
+
+                $company=Companies::where('id',Auth::user()->id)->
+                                    where('id',$id)
+                                    ->first();
+
+                  if($company){
+                    $company->update([
+                      'name'=>$request->name,
+                      'status'=>$request->status=1,
+                      'phone'=>$request->phone,
+                      'adress'=>$request->adress,
+                      'email'=>$request->email,
+                      'raison'=>$request->raison,
+                      'description'=>$request->description,
+                      'quartier'=>$request->quartier,
+                      'password'=>$request->password,
+                          ]);
+                        //   if(file_exists(public_path('images/'.$filename))){
+                        //     unlink(public_path('images/'.$filename));
+                        //   }else{
+                        //     dd('File not found');
+                        //   }
+                      return Helpers::response("sucess",true,$company);
+                      }
+
+                  }
+         } catch (\Throwable $th) {
+              return Helpers::response($th->getMessage(),false);
+         }
+
+
+
+     }
+    public function upadate_company_image(Request $request,$id){
+
+         try {
+             //code...
+             $validate=Validator::make($request->all(),[
+               'img' =>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+              ]);
+                if ($validate->fails()) {
+
+                    return Helpers::response($validate->getMessageBag(),false,);
+                }else {
+                    $file = $request->file('img');
+                    $filename = $file->getClientOriginalName();
+                                $dest_path = public_path('images/'.$filename);
+                                Image::make($file)->save($dest_path);
+                $company=Companies::where('id',Auth::user()->id)->
+                                    where('id',$id)
+                                    ->first();
+
+                  if($company){
+                    $company->update([
+                      'img'=>$filename,
+                          ]);
+                      return Helpers::response("sucess",true,$company);
+                      }
+
+                  }
+         } catch (\Throwable $th) {
+              return Helpers::response($th->getMessage(),false);
+         }
+
+
+
+     }
 
      //login companie
 
@@ -91,7 +178,7 @@ class CompanieController extends Controller
                        if(Auth::guard('companie')->attempt(['email'=>$request->email,'password'=>$request->password])){
                            $user = Auth::guard('companie')->user();
                           $token= $user->createToken("payement",['companie'])->plainTextToken;
-                          return Response::json(['token'=>$token,'status'=>true,'name'=>$user->name,'id'=>$user->id]);
+                          return Response::json(['token'=>$token,'status'=>true,'name'=>$user->name,'id'=>$user->id,"company"=>$user]);
                        }
                     }
            } catch (\Throwable $th) {
@@ -248,5 +335,26 @@ class CompanieController extends Controller
         ]);
         }
 
+     }
+
+  //changer le mot de passe d'une entreprise
+     public function changePasswordCompany(Request $request) {
+
+          try {
+              //code...
+              $user=Auth::user()->id;
+              $existe=Companies::where('id','=',$user)->first();
+               if($existe){
+                $existe->password =Hash::make($request->newpassword);
+                $existe->save();
+               return Helpers::response("Votre mot de passe à été bien modifier",true);
+
+               }else{
+                   return Helpers::response("L'entreprise n'existe pas",false);
+               }
+          } catch (\Throwable $th) {
+            return Helpers::response($th,false);
+
+          }
      }
 }

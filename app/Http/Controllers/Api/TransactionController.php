@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
+use App\Mail\NewOrder;
 use App\Mail\TransactionPay;
 use App\Mail\Transactions;
 use Illuminate\Support\Facades\Auth;
@@ -154,6 +155,36 @@ class TransactionController extends Controller
       }
 
 
- // get the transaction auth user
+
+ //paiement par free pay carte
+      public function payement(Request $request){
+        try {
+            $Cartes =Cart::where('code',$request->code)->first();
+
+            if ($Cartes && $Cartes->status==1 && $Cartes->company_id==$request->companyid) {
+
+                // $companyid=$Cartes->company_id;
+                $Company=Companies::findOrfail($companyid);
+                $companymail=$Company->email;
+                  if($Cartes->amount>=$request->amount){
+
+                      $Cartes->amount-=$request->amount;
+                      $Cartes->save();
+                    //   Mail::to($companymail)->send(new NewOrder($request->amount));
+                      return Helpers::response("Achat bien effectué",true);
+                  }else{
+                      return Helpers::response("Le solde de votre carte est insuffisant",false);
+
+                  }
+
+            }else{
+                return Helpers::response("Votre carte n'existe pas ou elle à été bloquée contactez votre entreprise",false);
+            }
+
+        } catch (\Throwable $th) {
+          return Helpers::response($th->getMessage(),false);
+
+        }
+    }
 
 }
