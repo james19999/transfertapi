@@ -22,7 +22,7 @@ class TransactionController extends Controller
 
     //demande d'une transaction par le client connecter pour une autre persconne
     // on dois géner un code transfert qui sera scanner liée à une cart
-    public function new_transaction(Request $request){
+    public function newtransaction(Request $request){
         try {
             $valide =Validator::make($request->all(),[
                 'title'          =>'required',
@@ -59,7 +59,7 @@ class TransactionController extends Controller
     }
 //validation de la transaction par l'entreprise  cette fonction est à revoir un peut
 
-    public function validate_transaction($code_tansaction){
+    public function validatetransaction($code_tansaction){
           try {
              //entreprise connecte
             $authcompany=Auth::user()->id;
@@ -116,7 +116,7 @@ class TransactionController extends Controller
       }
 
    //annuler une transaction par le costumer
-    public function cancel_transaction($code_tansaction){
+    public function canceltransaction($code_tansaction){
           try {
              //entreprise connecte
             $authcostumer=Auth::user()->id;

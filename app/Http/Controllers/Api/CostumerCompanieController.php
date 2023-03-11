@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 class CostumerCompanieController extends Controller
 {
 
-    public function login_costumer(Request $request) {
+    public function logincostumer(Request $request) {
         try {
             //code...
              $validate=Validator::make($request->all(),[
@@ -162,7 +162,7 @@ class CostumerCompanieController extends Controller
         }
 
 // logout
-        public  function logout_user(Request $request){
+        public  function logoutuser(Request $request){
             $logout=  $request->user()->currentAccessToken()->delete();
 
             try {

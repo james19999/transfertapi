@@ -30,7 +30,7 @@ class CompanieController extends Controller
     }
 
     //create company
-    public function create_company(Request $request){
+    public function createcompany(Request $request){
 
          try {
              //code...
@@ -75,7 +75,7 @@ class CompanieController extends Controller
 
 
      }
-    public function upadate_company(Request $request,$id){
+    public function upadatecompany(Request $request,$id){
 
          try {
              //code...
@@ -128,7 +128,7 @@ class CompanieController extends Controller
 
 
      }
-    public function upadate_company_image(Request $request,$id){
+    public function upadatecompanyimage(Request $request,$id){
 
          try {
              //code...
@@ -165,7 +165,7 @@ class CompanieController extends Controller
 
      //login companie
 
-     public function login_company(Request $request) {
+     public function logincompany(Request $request) {
            try {
                //code...
                 $validate=Validator::make($request->all(),[
@@ -297,7 +297,7 @@ class CompanieController extends Controller
      //get client order by company auth
 
 
-     public function get_client(){
+     public function getclient(){
            try {
                $client=CompanieCostumer::where('company_id',Auth::user()->id)->
                 orderby('created_at','DESC')
@@ -312,7 +312,7 @@ class CompanieController extends Controller
 
 
      // logout
-     public  function logout_company(Request $request){
+     public  function logoutcompany(Request $request){
         $logout=  $request->user()->currentAccessToken()->delete();
 
         try {
