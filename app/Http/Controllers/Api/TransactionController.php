@@ -163,9 +163,7 @@ class TransactionController extends Controller
 
             if ($Cartes && $Cartes->status==1 && $Cartes->company_id==$request->companyid) {
 
-                // $companyid=$Cartes->company_id;
-                $Company=Companies::findOrfail($companyid);
-                $companymail=$Company->email;
+
                   if($Cartes->amount>=$request->amount){
 
                       $Cartes->amount-=$request->amount;
@@ -186,5 +184,7 @@ class TransactionController extends Controller
 
         }
     }
+
+
 
 }
