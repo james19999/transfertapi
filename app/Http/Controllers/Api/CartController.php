@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 class CartController extends Controller
 {
    //create carte
-     public function create_cart(Request $request){
+     public function createcart(Request $request){
            try {
                $validate=Validator::make($request->all(),[
                 'amount'     =>'required',
@@ -56,7 +56,7 @@ class CartController extends Controller
      }
 
      //
-     public function edit_cart(Request $request ,$id){
+     public function editcart(Request $request ,$id){
             try {
                 $validate=Validator::make($request->all(),[
                     'created'    =>'required',
