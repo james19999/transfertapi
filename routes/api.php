@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\AuthanticedController;
 use App\Http\Controllers\Api\Pubs\SliderController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\Mailsend\MailController;
+use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\Pubs\PartenaireController;
 use App\Http\Controllers\Api\CostumerCompanieController;
 use App\Http\Controllers\Api\Promotions\PromotionController;
@@ -81,6 +82,9 @@ Route::post('/validate/transaction/{codetansaction}',[TransactionController::cla
 Route::post('/payement/carte/neworder',[TransactionController::class,'payement']);
 
 
-
+//change password controller
+Route::post('sendcode',[ChangePasswordController::class,'sendcode']);
+Route::post('verifycode',[ChangePasswordController::class,'verifycode']);
+Route::post('upadatepassword',[ChangePasswordController::class,'upadatepassword']);
 
 //ecommerce  controller

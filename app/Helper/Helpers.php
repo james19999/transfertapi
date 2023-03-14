@@ -24,7 +24,7 @@ class Helpers {
     //code generator
      public static function str_rancode($length=4){
 
-        $c='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNSTUVWXYZ';
+        $c='0123456789';
         return substr(str_shuffle($c),0,$length);
       }
       //cart code

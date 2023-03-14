@@ -20,7 +20,7 @@ class CompanieController extends Controller
 {
     // get company
     public function index () {
-      $company =Companies:: orderby('created_at', 'DESC')->get();
+     $company =Companies:: orderby('created_at', 'DESC')->get();
 
      try {
          return $company;
@@ -192,7 +192,7 @@ class CompanieController extends Controller
      //create client by companies
 
 
-        public function createClient (Request $request) {
+ public function createClient (Request $request) {
                  try {
                      //code...
 
@@ -357,4 +357,6 @@ class CompanieController extends Controller
 
           }
      }
+
+   
 }
