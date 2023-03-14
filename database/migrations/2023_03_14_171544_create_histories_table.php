@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->string('amount');
-            $table->strin('cart_number');
+            $table->string('cart_number');
             $table->string('company_id');
             $table->id();
             $table->timestamps();
