@@ -7,12 +7,13 @@ use App\Models\Cart;
 use App\Mail\Retrait;
 use App\Mail\Recharge;
 use App\Helper\Helpers;
+use App\Models\History;
 use App\Models\Companies;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Mail\InformationCart;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
-use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +34,7 @@ class CartController extends Controller
                 }else{
                         $company_auth=Auth::user()->id;
                         $codes=Helpers::cart_number();
-                        Cart::create([
+                    $cart=    Cart::create([
                             'code'       =>$request->code=$codes,
                             'created'    =>Carbon::now(),
                             'amount'     =>$request->amount,
@@ -41,6 +42,11 @@ class CartController extends Controller
                             'company_id' =>$request->company_id=$company_auth,
                             'client_id'  =>$request->client_id,
                             'status'  =>$request->status=true,
+                        ]);
+                        History::create([
+                             'amount'=>$cart->amount,
+                             'company_id'=>$company_auth,
+                             'cart_number'=>$cart->code,
                         ]);
                         $company=Companies::findOrfail($company_auth);
                         $clieemail=CompanieCostumer::findOrfail($request->client_id);
