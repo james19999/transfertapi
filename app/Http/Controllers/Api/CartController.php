@@ -254,5 +254,30 @@ class CartController extends Controller
                          return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
                     }
           }
+        public function deletecarte($cart_id){
+                    try {
+                        $carts =Cart::where('code',$cart_id)->where('company_id',Auth::user()->id)->first();
+                         if($carts){
+                             $companyid=Companies::findOrfail($carts->company_id);
+
+                                if($companyid->id== $carts->company_id){
+                                    
+                                  $carts->delete();
+                                
+                                return Helpers::response("Carte supprimé",true,$carts);
+
+                                    }else{
+                                    return Helpers::response("Vous n'est pas l'auteur de cette carte",false,$carts);
+
+                                   }
+                         }else{
+                            return Helpers::response("La carte n'existe pas",false,$carts);
+
+                         }
+                        //code...
+                    } catch (\Throwable $th) {
+                         return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
+                    }
+          }
 
 }

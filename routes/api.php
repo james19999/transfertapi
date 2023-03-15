@@ -51,6 +51,7 @@ Route::put('/Update/Client/{id}',[CompanieController::class,'UpdateClient'])->mi
 //create carte controller
 Route::get('/get/cart/with/company/transaction/{cartcode}',[CartController::class,'getcartwithcompanytransaction'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('/create/cart',[CartController::class,'createcart'])->middleware(['auth:sanctum','abilities:companie']);
+Route::delete('/deletecarte/{code}',[CartController::class,'deletecarte'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('/ActivDesactiveCart/{code}',[CartController::class,'ActivDesactiveCart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::put('/edit/cart/{id}',[CartController::class,'editcart'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('/get/cart/with/company',[CartController::class,'getcartwithcompany'])->middleware(['auth:sanctum','abilities:companie']);
