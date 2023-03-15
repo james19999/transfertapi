@@ -147,7 +147,12 @@ class CartController extends Controller
                          $clieemail=CompanieCostumer::findOrfail($Carts->client_id);
                          $cartnumer =$Carts->code;
 
-                        Mail::to($clieemail->email)->send(new Recharge($request->amount,$Carts->amount,$cartnumer));
+                         History::create([
+                            'amount'=>$request->amount,
+                            'company_id'=>$Carts->company_id,
+                            'cart_number'=>$Carts->code,
+                       ]);
+                         Mail::to($clieemail->email)->send(new Recharge($request->amount,$Carts->amount,$cartnumer));
                          $Carts->save();
 
                          return Helpers::response("success",true,$Carts);
