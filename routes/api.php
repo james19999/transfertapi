@@ -90,9 +90,9 @@ Route::post('upadatepassword',[ChangePasswordController::class,'upadatepassword'
 
 
 // history controller
-Route::get('gethsitoryoffcompanytoday',[HistoryController::class,'gethsitoryoffcompanytoday']);
-Route::get('getallhistory',[HistoryController::class,'getallhistory']);
-Route::get('gethistoryoffweek',[HistoryController::class,'gethistoryoffweek']);
-Route::get('gethistoryoffmonth',[HistoryController::class,'gethistoryoffmonth']);
+Route::get('gethsitoryoffcompanytoday',[HistoryController::class,'gethsitoryoffcompanytoday'])->middleware(['auth:sanctum','abilities:companie']);
+Route::get('getallhistory',[HistoryController::class,'getallhistory'])->middleware(['auth:sanctum','abilities:companie']);
+Route::get('gethistoryoffweek',[HistoryController::class,'gethistoryoffweek'])->middleware(['auth:sanctum','abilities:companie']);
+Route::get('gethistoryoffmonth',[HistoryController::class,'gethistoryoffmonth'])->middleware(['auth:sanctum','abilities:companie']);
 
 //ecommerce  controller
