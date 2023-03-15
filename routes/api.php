@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Mailsend\MailController;
 use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\Pubs\PartenaireController;
 use App\Http\Controllers\Api\CostumerCompanieController;
+use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\Promotions\PromotionController;
 use App\Http\Controllers\Api\Pageview\PageViewModelController;
 
@@ -86,5 +87,12 @@ Route::post('/payement/carte/neworder',[TransactionController::class,'payement']
 Route::post('sendcode',[ChangePasswordController::class,'sendcode']);
 Route::post('verifycode',[ChangePasswordController::class,'verifycode']);
 Route::post('upadatepassword',[ChangePasswordController::class,'upadatepassword']);
+
+
+// history controller
+Route::get('gethsitoryoffcompanytoday',[HistoryController::class,'gethsitoryoffcompanytoday']);
+Route::get('getallhistory',[HistoryController::class,'getallhistory']);
+Route::get('gethistoryoffweek',[HistoryController::class,'gethistoryoffweek']);
+Route::get('gethistoryoffmonth',[HistoryController::class,'gethistoryoffmonth']);
 
 //ecommerce  controller
