@@ -33,26 +33,33 @@ class CartController extends Controller
 
                 }else{
                         $company_auth=Auth::user()->id;
-                        $codes=Helpers::cart_number();
-                    $cart=    Cart::create([
-                            'code'       =>$request->code=$codes,
-                            'created'    =>Carbon::now(),
-                            'amount'     =>$request->amount,
-                            'qrcode'     =>$request->qrcode,
-                            'company_id' =>$request->company_id=$company_auth,
-                            'client_id'  =>$request->client_id,
-                            'status'  =>$request->status=true,
-                        ]);
-                        History::create([
-                             'amount'=>$cart->amount,
-                             'company_id'=>$company_auth,
-                             'cart_number'=>$cart->code,
-                        ]);
-                        $company=Companies::findOrfail($company_auth);
-                        $clieemail=CompanieCostumer::findOrfail($request->client_id);
-                        Mail::to($clieemail->email)->send(new InformationCart($company->name, $request->code,$request->amount));
+                        $existe=Cart::where('company_id' ,'=',$company_auth)
+                        ->where('client_id',$request->client_id)
+                        ->count();
+                         if($existe){
+                         return Helpers::response("Card existe",false);
+                         }else{
+                         $codes=Helpers::cart_number();
+                         $cart=    Cart::create([
+                                 'code'       =>$request->code=$codes,
+                                 'created'    =>Carbon::now(),
+                                 'amount'     =>$request->amount,
+                                 'qrcode'     =>$request->qrcode,
+                                 'company_id' =>$request->company_id=$company_auth,
+                                 'client_id'  =>$request->client_id,
+                                 'status'  =>$request->status=true,
+                             ]);
+                             History::create([
+                                  'amount'=>$cart->amount,
+                                  'company_id'=>$company_auth,
+                                  'cart_number'=>$cart->code,
+                             ]);
+                             $company=Companies::findOrfail($company_auth);
+                             $clieemail=CompanieCostumer::findOrfail($request->client_id);
+                             Mail::to($clieemail->email)->send(new InformationCart($company->name, $request->code,$request->amount));
 
-                        return Helpers::response("success",true);
+                             return Helpers::response("success",true);
+                         }
 
                 }
             } catch (\Throwable $th) {
@@ -261,9 +268,9 @@ class CartController extends Controller
                              $companyid=Companies::findOrfail($carts->company_id);
 
                                 if($companyid->id== $carts->company_id){
-                                    
+
                                   $carts->delete();
-                                
+
                                 return Helpers::response("Carte supprimé",true,$carts);
 
                                     }else{
