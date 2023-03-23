@@ -168,6 +168,34 @@ class TransactionController extends Controller
 
                       $Cartes->amount-=$request->amount;
                       $Cartes->save();
+                      $companymail=Companies::where('id',$Cartes->company_id)->first();
+                      Mail::to($companymail->email)->send(new NewOrder($request->amount));
+                      return Helpers::response("Achat bien effectué",true);
+                  }else{
+                      return Helpers::response("Le solde de votre carte est insuffisant",false);
+
+                  }
+
+            }else{
+                return Helpers::response("Votre carte n'existe pas ou elle à été bloquée contactez votre entreprise",false);
+            }
+
+        } catch (\Throwable $th) {
+          return Helpers::response($th->getMessage(),false);
+
+        }
+    }
+      public function ecomme(Request $request){
+        try {
+            $Cartes =Cart::where('code',$request->code)->first();
+
+            if ($Cartes && $Cartes->status==1 && $Cartes->company_id==$request->companyid) {
+
+
+                  if($Cartes->amount>=$request->amount){
+
+                      $Cartes->amount-=$request->amount;
+                      $Cartes->save();
                     //   Mail::to($companymail)->send(new NewOrder($request->amount));
                       return Helpers::response("Achat bien effectué",true);
                   }else{

@@ -82,6 +82,7 @@ Route::get('/cancel/transaction/{codetansaction}',[TransactionController::class,
 Route::post('/validate/transaction/{codetansaction}',[TransactionController::class,'validatetransaction'])->middleware(['auth:sanctum','abilities:companie']);
 
 Route::post('/payement/carte/neworder',[TransactionController::class,'payement']);
+Route::post('/payement/carte/ecomme',[TransactionController::class,'ecomme']);
 
 
 //change password controller
