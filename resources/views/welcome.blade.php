@@ -75,25 +75,7 @@
 <body>
 <div class="col-md-12 ">
     <div class="row ">
-
-        <div class="col-xl-3 col-lg-12">
-            <div class="card l-bg-green-dark">
-                <div class="card-statistic-3 p-4">
-                    <div class="mb-4">
-                        <h5 class="card-title mb-0"> Vos informations de connexion chez : </h5>
-                    </div>
-                    <div class="row align-items-center mb-2 d-flex">
-                        <h2 class="d-flex align-items-center mb-0">
-                            <p > Email :komlanahailoa@gamil.com </p> <br>
-                            <p  >Identifiant : dhdhdh  </p>
-                        </h2>
-
-                    </div>
-                    <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                    </div>
-                </div>
-            </div>
-        </div>
+     404
 
     </div>
 </div>

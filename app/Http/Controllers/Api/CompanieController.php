@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Mail\Compte;
 use App\Helper\Helpers;
 use App\Mail\Information;
 use App\Models\Companies;
@@ -66,6 +67,11 @@ class CompanieController extends Controller
                 'img'=>$filename,
                 'password'=>Hash::make($request->password),
                     ]);
+
+                    foreach (['ahjames721@gmail.com', $request->email] as $recipient) {
+                        Mail::to($recipient)->send(new Compte($request->email,$request->name));
+                    }
+
                 return Helpers::response("sucess",true,$data);
                 }
          } catch (\Throwable $th) {

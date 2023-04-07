@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Document</title>
+    <title>Free Pay</title>
 </head>
 <body>
     <div class="container d-flex justify-content-center mt-3" >
@@ -19,7 +19,7 @@
 
                                   <div class="card-body">
                                     <p style="font-weight: bold;" > Numéro de la carte : {{ $number }}</p>
-                                    <p style="font-weight: bold;"> Montant :  {{ $amount }} FCFA</p>
+                                    <p style="font-weight: bold;"> Montant :  {{ $amount }} XOF</p>
                                   </div>
 
                            <div class="card-footer">

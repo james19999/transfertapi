@@ -13,12 +13,11 @@
                           <div class="col-lg-12">
                                    <div class="card">
                                        <div class="card-header">
-                                     <h4>Vous avez reçu une nouvelle commade dépuis votre application</h4>
+                                     <h4>Bienvenue {{ $name }} sur Free Pay . </h4>
                                     </div>
-                                              <div class="card-body">
-                                                <p style="font-weight: bold;"> Total : {{ $amount }}  XOF</p>
-                                              </div>
-
+                                        <div class="card-body">
+                                        <p style="font-weight: bold;"> Email : {{ $mail }}</p>
+                                        </div>
                                        <div class="card-footer">
 
                                        </div>
