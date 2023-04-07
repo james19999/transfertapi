@@ -364,5 +364,32 @@ class CompanieController extends Controller
           }
      }
 
-   
+
+     public function ActiveCompany($id) {
+        try {
+
+            $company =Companies::findOrfail($id);
+
+         if ($company) {
+
+            if ($company->status==0) {
+                # code...
+                 $company->status=1;
+                 $company->save();
+            } elseif ($company->status==1){
+                $company->status=0;
+                $company->save();
+
+            }
+            return Helpers::response("Company active",true);
+
+         }else{
+            return Helpers::response("Company not found",false);
+
+        }
+    } catch (\Throwable $th) {
+           return Helpers::response($th,false);
+        //throw $th;
+       }
+    }
 }

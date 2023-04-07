@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/createcompany',[CompanieController::class,'createcompany']);
 Route::get('/getcompany',[CompanieController::class,'index']);
+Route::get('/ActiveCompany/{id}',[CompanieController::class,'ActiveCompany']);
 Route::post('/logincompany',[CompanieController::class,'logincompany']);
 Route::post('/create/client/company',[CompanieController::class,'createClient'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('/get/client',[CompanieController::class,'getclient'])->middleware(['auth:sanctum','abilities:companie']);
