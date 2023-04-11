@@ -187,4 +187,32 @@ class CostumerCompanieController extends Controller
 
          }
 
+
+           public function deletecostumer ($id) {
+                try {
+                  $ids=Auth::user()->id;
+
+                    $costumercompany =CompanieCostumer::where('company_id',$ids)->where('id',$id)->first();
+                       if ($costumercompany) {
+                        # code...
+                        $costumercompany->delete();
+
+                        return Response::json([
+                            "status"=>true,
+                            "message"=>"client supprimé",
+                       ]);
+                       } else {
+                        return Response::json([
+                            "status"=>false,
+                            "message"=>"costumer not found",
+                       ]);
+                       }
+
+                } catch (\Throwable $th) {
+                    return Response::json([
+                        "status"=>false,
+                        "message"=>"$th",
+                   ]);
+                }
+           }
 }

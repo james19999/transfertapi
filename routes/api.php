@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/createcompany',[CompanieController::class,'createcompany']);
 Route::get('/getcompany',[CompanieController::class,'index']);
 Route::get('/ActiveCompany/{id}',[CompanieController::class,'ActiveCompany']);
+Route::delete('/Delete/company/{id}',[CompanieController::class,'Delete_company']);
 Route::post('/logincompany',[CompanieController::class,'logincompany']);
 Route::post('/create/client/company',[CompanieController::class,'createClient'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('/get/client',[CompanieController::class,'getclient'])->middleware(['auth:sanctum','abilities:companie']);
@@ -66,6 +67,7 @@ Route::post('/logout/company',[CompanieController::class,'logoutcompany'])->midd
 //client companie controller
 
 Route::post('/login/costumer',[CostumerCompanieController::class,'logincostumer']);
+Route::delete('/deletecostumer/{id}',[CostumerCompanieController::class,'deletecostumer'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::get('/getauthcart',[CostumerCompanieController::class,'getauthcart'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::get('/getauthcarttransaction/{code}',[CostumerCompanieController::class,'getauthcarttransaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::get('/getalltransaction/{code}',[CostumerCompanieController::class,'getalltransaction'])->middleware(['auth:sanctum','abilities:companiecostumer']);

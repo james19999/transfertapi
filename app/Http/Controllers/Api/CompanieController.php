@@ -77,10 +77,10 @@ class CompanieController extends Controller
          } catch (\Throwable $th) {
               return Helpers::response($th->getMessage(),false);
          }
-
-
-
      }
+
+
+
     public function upadatecompany(Request $request,$id){
 
          try {
@@ -376,12 +376,13 @@ class CompanieController extends Controller
                 # code...
                  $company->status=1;
                  $company->save();
+            return Helpers::response("Company activée",true);
+
             } elseif ($company->status==1){
                 $company->status=0;
                 $company->save();
-
+             return Helpers::response("Company Désactivée",true);
             }
-            return Helpers::response("Company active",true);
 
          }else{
             return Helpers::response("Company not found",false);
@@ -392,4 +393,36 @@ class CompanieController extends Controller
         //throw $th;
        }
     }
+
+
+
+
+    public function Delete_company($id){
+
+        try {
+           $company=Companies::findOrfail($id);
+           if($company){
+               $company->delete();
+               if(file_exists(public_path('images/'.$company->img))){
+                   unlink(public_path('images/'.$company->img));
+                 }else{
+                   dd('File not found');
+                 }
+               return Response::json([
+                   "status"=>true,
+                   "message"=>"company supprimé",
+              ]);
+           }else{
+               return Response::json([
+                   "status"=>false,
+                   "message"=>"company  n'existe pas",
+              ]);
+           }
+        } catch (\Throwable $th) {
+           return response()->json(['message'=>$th->getMessage(),
+           'status'=>false,
+           ]);
+        }
+
+   }
 }
