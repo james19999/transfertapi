@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\CompanieCostumer;
 use App\Http\Controllers\Controller;
 use App\Mail\NewOrder;
+use App\Mail\NewTransaction;
 use App\Mail\TransactionPay;
 use App\Mail\Transactions;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,10 @@ class TransactionController extends Controller
              }else{
                  $user=Auth::user()->id;
                  $usecartid=Cart::where('client_id',$user)->first();
-                Transaction::create([
+
+
+
+             $transactions= Transaction::create([
                     'title' =>$request->title,
                     // 'status'=>$request->status='peding',
                     'amount' =>$request->amount,
@@ -49,6 +53,15 @@ class TransactionController extends Controller
                     'company_id'=>$usecartid->company_id,
                     'created'        =>Carbon::now(),
                 ]);
+
+                $company_email=Companies::findOrfail($usecartid->company_id);
+                $email=$company_email->email;
+                $transaction_cartcode=$transactions->cartcode;
+                $transaction_title=$transactions->title;
+                $transaction_code_tansaction=$transactions->code_tansaction;
+                $user_name=$user->name;
+
+                Mail::to($email)->send(new NewTransaction($transaction_code_tansaction,$user_name,$transaction_cartcode, $transaction_title));
 
                return Helpers::response("success",true);
              }
