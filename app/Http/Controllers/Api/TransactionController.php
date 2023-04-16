@@ -54,14 +54,17 @@ class TransactionController extends Controller
                     'created'        =>Carbon::now(),
                 ]);
 
-                // $company_email=Companies::findOrfail($usecartid->company_id);
-                // $email=$company_email->email;
-                // $transaction_cartcode=$transactions->cartcode;
-                // $transaction_title=$transactions->title;
-                // $transaction_code_tansaction=$transactions->code_tansaction;
-                // $user_name=$user->name;
+                $company_email=Companies::findOrfail($usecartid->company_id);
 
-                // Mail::to($email)->send(new NewTransaction($transaction_code_tansaction,$user_name,$transaction_cartcode, $transaction_title));
+                $username=CompanieCostumer::findOrfail($user);
+                $user_name=$username->name;
+                $email=$company_email->email;
+
+                $transaction_cartcode=$transactions->cartcode;
+                $transaction_title=$transactions->title;
+                $transaction_code_tansaction=$transactions->code_tansaction;
+
+                Mail::to($email)->send(new NewTransaction($transaction_code_tansaction,$user_name,$transaction_cartcode, $transaction_title));
 
                return Helpers::response("success",true);
              }
