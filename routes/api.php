@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\Pubs\PartenaireController;
 use App\Http\Controllers\Api\CostumerCompanieController;
 use App\Http\Controllers\Api\HistoryController;
+use App\Http\Controllers\Api\MobileMoneyController;
 use App\Http\Controllers\Api\Promotions\PromotionController;
 use App\Http\Controllers\Api\Pageview\PageViewModelController;
 
@@ -100,4 +101,7 @@ Route::get('getallhistory',[HistoryController::class,'getallhistory'])->middlewa
 Route::get('gethistoryoffweek',[HistoryController::class,'gethistoryoffweek'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('gethistoryoffmonth',[HistoryController::class,'gethistoryoffmonth'])->middleware(['auth:sanctum','abilities:companie']);
 
-//ecommerce  controller
+//MobileMoney controller
+// le client dois être authantifier
+Route::post("/TmoneyCredite",[MobileMoneyController::class,'TmoneyCredite'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::post("/FloozCredite",[MobileMoneyController::class,'FloozCredite'])->middleware(['auth:sanctum','abilities:companiecostumer']);

@@ -68,7 +68,7 @@ class CartController extends Controller
            }
      }
 
-     //
+     // pas encore mise en place au niveau du mobile
      public function editcart(Request $request ,$id){
             try {
                 $validate=Validator::make($request->all(),[
@@ -109,7 +109,7 @@ class CartController extends Controller
             }
         }
 
-
+// récupération des carte de l'entreprise connecter
         public function getcartwithcompany(){
             try {
                 $Carts=Cart::where('company_id',Auth::user()->id)->
@@ -124,7 +124,7 @@ class CartController extends Controller
 
             }
         }
-        ///get transcation to day de la carte de du company conncté
+        ///get transcation to day de la carte de du company conncter
         public function getcartwithcompanytransaction($cartcode){
             try {
                 $Transaction=Transaction::where('company_id',Auth::user()->id)->
@@ -141,7 +141,7 @@ class CartController extends Controller
             }
         }
 
-//recharger une cart a partie du code de la carte
+//recharger une cart a partie du code de la carte (créditer une carte)
         public function addamountwithcart(Request $request, $code){
 
                 try {
@@ -261,6 +261,8 @@ class CartController extends Controller
                          return Helpers::response("Carte n'existe pas ou elle est bloquée",false);
                     }
           }
+
+          //supprimé une carte
         public function deletecarte($cart_id){
                     try {
                         $carts =Cart::where('code',$cart_id)->where('company_id',Auth::user()->id)->first();

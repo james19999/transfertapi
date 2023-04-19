@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Validator;
 class TransactionController extends Controller
 {
 
-    //demande d'une transaction par le client connecter pour une autre persconne
+    //demande d'une transaction par le client connecter pour une autre personne
     // on dois géner un code transfert qui sera scanner liée à une cart
     public function newtransaction(Request $request){
         try {
@@ -73,7 +73,7 @@ class TransactionController extends Controller
 
         }
     }
-//validation de la transaction par l'entreprise  cette fonction est à revoir un peut
+//validation de la transaction par l'entreprise
 
     public function validatetransaction($code_tansaction){
           try {
@@ -108,6 +108,7 @@ class TransactionController extends Controller
                        $restant=$cart->amount;
                        $mail=$costumercompany->email;
                        Mail::to($mail)->send(new TransactionPay($amounts,$titles,$company_name,$restant));
+
                    return Helpers::response("Opération  effectuée",true);
 
                     }else{
@@ -161,9 +162,6 @@ class TransactionController extends Controller
 
             }
 
-
-
-
           } catch (\Throwable $th) {
             return Helpers::response($th->getMessage(),false);
 
@@ -172,7 +170,7 @@ class TransactionController extends Controller
 
 
 
- //paiement par free pay carte
+ //paiement par free pay carte au  niveau des entreprise avec le numéro de la carte
       public function payement(Request $request){
         try {
             $Cartes =Cart::where('code',$request->code)->first();
@@ -201,6 +199,8 @@ class TransactionController extends Controller
 
         }
     }
+
+    //api d'intégartion sur les autres plateforme
       public function ecomme(Request $request){
         try {
             $Cartes =Cart::where('code',$request->code)->first();

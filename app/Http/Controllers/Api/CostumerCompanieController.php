@@ -54,9 +54,10 @@ class CostumerCompanieController extends Controller
                 $costumercompany=CompanieCostumer::findOrfail($carts->client_id);
                 $namecostumer=$costumercompany->name;
                 $name=$companyname->name;
+                $phone=$companyname->phone;
                   if ($carts) {
                       # code...
-                      return  Response::json(['Cartes'=>$carts ,'NameCompanye'=>$name ,'NameCostumer'=> $namecostumer]);
+                      return  Response::json(['Cartes'=>$carts ,'NameCompanye'=>$name , 'PhoneCompanye'=>$phone ,'NameCostumer'=> $namecostumer]);
                   }else{
                   return Helpers::response("Cart not found",false);
                   }

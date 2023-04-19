@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 
 class ChangePasswordController extends Controller
 {
+    //conroller de réinitialiation du mot de passe
     public function sendcode(Request $request){
           try {
             //code...
@@ -36,6 +37,7 @@ class ChangePasswordController extends Controller
           }
    }
 
+    // méthode d'envoi du code de vérification il est à revoir car le code dois s'expiré après un temps donné ce qui n'est pas fait
    public function verifycode (Request $request ){
 
        try {
@@ -43,7 +45,7 @@ class ChangePasswordController extends Controller
         $code=Code::where('code',$request->code)->first();
            if($code){
                return Response::json(['status'=>true,'message'=>'valide code']);
-                
+
            }else{
             return Response::json(['status'=>false ,'message'=>'code invalide']);
            }
@@ -52,8 +54,9 @@ class ChangePasswordController extends Controller
        }
    }
 
+   // mise à jour du mot de passe
    public function upadatepassword(Request $request) {
-     
+
        $company=Companies::where('email',$request->email)->first();
 
            if($company){
