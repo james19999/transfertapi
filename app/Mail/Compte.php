@@ -14,15 +14,17 @@ class Compte extends Mailable
     use Queueable, SerializesModels;
     public $mail;
     public $name;
+    public $url;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mail,$name)
+    public function __construct($mail,$name,$url)
     {
         $this->mail = $mail;
         $this->name = $name;
+        $this->url = $url;
     }
 
     /**
@@ -49,6 +51,7 @@ class Compte extends Mailable
             with:[
                  'mail'=>$this->mail,
                  'name'=>$this->name,
+                 'url'=>$this->url,
             ],
         );
     }

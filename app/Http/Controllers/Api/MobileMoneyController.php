@@ -16,22 +16,35 @@ class MobileMoneyController extends Controller
             $Carts=Cart::where('code',$request->code)->first();
                  if ($Carts) {
                     # code...
+                  //téléphone entrer par utilisateur
+                  $phonecompanyrequest=$request->phone;
 
-                 $phonecompany=$request->phone;
-                //  $company=Companies::findOrfail($Carts->company_id);
-                //   $phonecompany=$company->phone;
-                //ici on demande le montant qu'il aimerais recharge cela correspond également celui demandé par l'api TG;
-                $montant=$request->montant;
-                //Traitement Api TG pour savoir s'il veut ajouter des frais de recharge
+                  //montant entrer par l'utilisateur
+                  $montant=$request->montant;
 
-                //maintenant prenon le montant $montant envoyer sur le numéro de l'entreprise et le même montant pour recharge sa carte
-                // 1 api TG traitement
-                  //numérodestinataieTG =  $phonecompany;
-                  //montantRechargeTG=$montant;
-                // 2 Recharge carte virtuelle
-                //on dois vérifier si le traitement MobileMoney de passe bien avant de créditer la carte user;
+                  //récupération de l'entreprise
+                  $company=Companies::findOrfail($Carts->company_id);
+                  //téléphone de l'entreprise auteur de la carte
+                   $phonecompany=$company->phone;
+                  //vérifion si le numéro entrer par user correspond a celui de l entreprise
+                     if($phonecompany==$phonecompanyrequest) {
 
-                return  Response::json(['status'=>true,"phone"=>"$phonecompany","montant recharge"=>"$montant"]); //il est à supprimé plus tard
+                       //ici on demande le montant qu'il aimerais recharge cela correspond également celui demandé par l'api TG;
+                       //Traitement Api TG pour savoir s'il veut ajouter des frais de recharge
+
+                       //maintenant prenon le montant $montant envoyer sur le numéro de l'entreprise et le même montant pour recharge sa carte
+                       // 1 api TG traitement
+                         //numérodestinataieTG =  $phonecompany;
+                         //montantRechargeTG=$montant;
+                       // 2 Recharge carte virtuelle
+                       //on dois vérifier si le traitement MobileMoney de passe bien avant de créditer la carte user;
+                       return  Response::json(['status'=>true,"phone"=>"$phonecompany","montant recharge"=>"$montant"]); //il est à supprimé plus tard
+                     }else {
+                      return  Response::json(['status'=>false,"message"=>"Numéro de l'entreprise incorrect"]); //il est à supprimé plus tard
+
+                     }
+
+
 
                   $Carts->amount=+$montant;
 
@@ -56,22 +69,35 @@ class MobileMoneyController extends Controller
             $Carts=Cart::where('code',$request->code)->first();
                  if ($Carts) {
                     # code...
+                  //téléphone entrer par utilisateur
+                  $phonecompanyrequest=$request->phone;
 
-                 $phonecompany=$request->phone;
-                //  $company=Companies::findOrfail($Carts->company_id);
-                //   $phonecompany=$company->phone;
-                //ici on demande le montant qu'il aimerais recharge cela correspond également celui demandé par l'api TG;
-                $montant=$request->montant;
-                //Traitement Api TG pour savoir s'il veut ajouter des frais de recharge
+                  //montant entrer par l'utilisateur
+                  $montant=$request->montant;
 
-                //maintenant prenon le montant $montant envoyer sur le numéro de l'entreprise et le même montant pour recharge sa carte
-                // 1 api TG traitement
-                  //numérodestinataieTG =  $phonecompany;
-                  //montantRechargeTG=$montant;
-                // 2 Recharge carte virtuelle
-                //on dois vérifier si le traitement MobileMoney de passe bien avant de créditer la carte user;
+                  //récupération de l'entreprise
+                  $company=Companies::findOrfail($Carts->company_id);
+                  //téléphone de l'entreprise auteur de la carte
+                   $phonecompany=$company->phone;
+                  //vérifion si le numéro entrer par user correspond a celui de l entreprise
+                     if($phonecompany==$phonecompanyrequest) {
 
-                return  Response::json(['status'=>true,"phone"=>"$phonecompany","montant recharge"=>"$montant"]); //il est à supprimé plus tard
+                       //ici on demande le montant qu'il aimerais recharge cela correspond également celui demandé par l'api TG;
+                       //Traitement Api TG pour savoir s'il veut ajouter des frais de recharge
+
+                       //maintenant prenon le montant $montant envoyer sur le numéro de l'entreprise et le même montant pour recharge sa carte
+                       // 1 api TG traitement
+                         //numérodestinataieTG =  $phonecompany;
+                         //montantRechargeTG=$montant;
+                       // 2 Recharge carte virtuelle
+                       //on dois vérifier si le traitement MobileMoney de passe bien avant de créditer la carte user;
+                       return  Response::json(['status'=>true,"phone"=>"$phonecompany","montant recharge"=>"$montant"]); //il est à supprimé plus tard
+                     }else {
+                      return  Response::json(['status'=>false,"message"=>"Numéro de l'entreprise incorrect"]); //il est à supprimé plus tard
+
+                     }
+
+
 
                   $Carts->amount=+$montant;
 
@@ -90,4 +116,5 @@ class MobileMoneyController extends Controller
 
           }
     }
+
 }

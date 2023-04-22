@@ -16,6 +16,8 @@
                                      <h4>Bienvenue {{ $name }} sur Free Pay . </h4>
                                     </div>
                                         <div class="card-body">
+
+                                        <p style="font-weight: bold;"> Cliquez ici pour télécharger l'application entreprise pour vous connecter: {{ $url }}</p>
                                         <p style="font-weight: bold;"> Email : {{ $mail }}</p>
                                         </div>
                                        <div class="card-footer">

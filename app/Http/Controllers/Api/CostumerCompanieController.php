@@ -188,7 +188,7 @@ class CostumerCompanieController extends Controller
 
          }
 
-
+// A revoir
            public function deletecostumer ($id) {
                 try {
                   $ids=Auth::user()->id;
@@ -216,4 +216,31 @@ class CostumerCompanieController extends Controller
                    ]);
                 }
            }
+
+
+
+        public function UpdateCostumerIdenfify(Request $request) {
+
+              try {
+                //code...
+                $authuser=Auth::user();
+                $user_id=$authuser->id;
+                $user_company_id=$authuser->company_id;
+
+               $costumercompany =CompanieCostumer::where('company_id',$user_company_id)->where('id',$user_id)->first();
+                 if($costumercompany){
+
+                  $costumercompany->update(['identify'=>$request->identify]);
+                  return Response::json(['status'=>true ,'message'=>'success']);
+                 }else{
+                  return Response::json(['status'=>false ,'message'=>'error']);
+
+                 }
+
+              } catch (\Throwable $th) {
+                return Response::json(['status'=>false ,'message'=>"$th"]);
+
+              }
+
+        }
 }

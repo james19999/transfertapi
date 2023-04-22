@@ -76,6 +76,8 @@ Route::get('/gettransactionoffweek/{code}',[CostumerCompanieController::class,'g
 Route::get('/gettransactionoffmonth/{code}',[CostumerCompanieController::class,'gettransactionoffmonth'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 Route::post('/logout/user',[CostumerCompanieController::class,'logoutuser'])->middleware(['auth:sanctum','abilities:companiecostumer']);
 
+Route::post('/Update/Costumer/Idenfify',[CostumerCompanieController::class,'UpdateCostumerIdenfify'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+
 
 
 //transaction controller
@@ -103,5 +105,7 @@ Route::get('gethistoryoffmonth',[HistoryController::class,'gethistoryoffmonth'])
 
 //MobileMoney controller
 // le client dois être authantifier
-Route::post("/TmoneyCredite",[MobileMoneyController::class,'TmoneyCredite'])->middleware(['auth:sanctum','abilities:companiecostumer']);
-Route::post("/FloozCredite",[MobileMoneyController::class,'FloozCredite'])->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::post("/TmoneyCredite",[MobileMoneyController::class,'TmoneyCredite'])
+->middleware(['auth:sanctum','abilities:companiecostumer']);
+Route::post("/FloozCredite",[MobileMoneyController::class,'FloozCredite'])
+->middleware(['auth:sanctum','abilities:companiecostumer']);

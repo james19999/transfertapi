@@ -69,7 +69,7 @@ class CompanieController extends Controller
                     ]);
 
                     foreach (['ahjames721@gmail.com', $request->email] as $recipient) {
-                        Mail::to($recipient)->send(new Compte($request->email,$request->name));
+                        Mail::to($recipient)->send(new Compte($request->email,$request->name,"https://play.google.com/store/apps/details?id=com.freepayagency.digitalservices"));
                     }
 
                 return Helpers::response("sucess",true,$data);
