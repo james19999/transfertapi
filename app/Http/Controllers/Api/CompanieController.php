@@ -37,10 +37,10 @@ class CompanieController extends Controller
              //code...
              $validate=Validator::make($request->all(),[
                 'name'        =>'required'      ,
-                'phone'       =>'required|unique:companies,phone'      ,
+                'phone'       =>'required|unique:companies,phone',
                 'adress'      =>'required',
                 'description'      =>'required',
-                'email'       =>'required|email|unique:companies,email'      ,
+                'email'       =>'required|email|unique:companies,email',
                 // 'raison'      =>'required'      ,
                 // 'domaine'     =>'required'      ,
                'img' =>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
