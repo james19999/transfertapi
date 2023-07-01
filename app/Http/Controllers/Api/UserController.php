@@ -107,7 +107,7 @@ class UserController extends Controller
 
            }else{
 
-               $user=Auth::user()->id;
+               $user=Auth::user()->company_id;
                $existe=CompanieCostumer::where('person_company' ,'=',$user)
                ->where('phone',$request->phone)
                ->where('email',$request->email)
@@ -168,7 +168,7 @@ class UserController extends Controller
                $CompanieCostumer=CompanieCostumer::findOrfail($id);
                if($CompanieCostumer){
                    //  $company=Companies::findOrfail($user);
-                     $user=Auth::user()->id;
+                     $user=Auth::user()->company_id;
 
                        $CompanieCostumer->update(['name'=>$request->name,
                        'ville'=>$request->ville,
