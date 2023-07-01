@@ -12,5 +12,6 @@ class History extends Model
         'amount',
         'company_id',
         'cart_number',
+        'person_company',
     ];
 }

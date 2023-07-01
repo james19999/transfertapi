@@ -35,7 +35,7 @@ class CostumerCompanieController extends Controller
                         $token= $costumercompany->createToken("costumer",['companiecostumer'])->plainTextToken;
                         return Response::json(['token'=>$token,'name'=>$costumercompany->name,'status'=>true]);
                     }else{
-                        return Helpers::response("error ",false);;
+                        return Helpers::response("error ",false);
                     }
                  }
         } catch (\Throwable $th) {

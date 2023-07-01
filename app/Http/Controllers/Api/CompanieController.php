@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Mail\Info;
 use App\Mail\Compte;
+use App\Models\User;
 use App\Helper\Helpers;
 use App\Mail\Information;
 use App\Models\Companies;
@@ -425,4 +427,151 @@ class CompanieController extends Controller
         }
 
    }
+
+
+
+  public function create_user_person (Request $request) {
+
+
+      try {
+           $companyauth= Auth::user()->id;
+
+           $validate=Validator::make($request->all(),[
+            'name'    =>'required',
+            'phone'   =>'required',
+            'email'   =>'required',
+            'quartier'=>'required'  ,
+            'password'=>'required',
+            'username'=>'required|unique:users,username'  ,
+         ]);
+
+          if($validate->fails()){
+             return  Response::json(['status'=>false,'message'=>$validate->getMessageBag()]);
+          }else{
+
+            $existe=User::where('company_id' ,'=',$companyauth)
+            ->where('phone',$request->phone)
+            ->where('email',$request->email)
+            ->where('username',$request->username)
+            ->count();
+             if ($existe) {
+                # code...
+                return Helpers::response("vous avez un utilisateur déjà avec les même informations",false);
+             } else {
+                # code...
+            $user= User::create([
+                    'name'=>$request->name,
+                    "phone"=>$request->phone,
+                    "email"=>$request->email,
+                    "quartier"=>$request->quartier,
+                    "username"=>$request->username,
+                    "company_id"=>$companyauth,
+                    "password"=>Hash::make($request->password),
+                    ]);
+                    Mail::to($request->email)->send(new Info($user));
+
+                    return Response::json(['status'=>true ,'message'=>'success']);
+             }
+
+
+          }
+
+        //code...
+       } catch (\Throwable $th) {
+        //throw $th;
+        return Response::json(['status'=>false ,'message'=>$th->getMessage()]);
+
+       }
+   }
+
+
+  public function update_user_person (Request $request,$id) {
+
+
+      try {
+           $companyauth= Auth::user()->id;
+           $user=User::where('company_id',$companyauth)
+             ->where('id',$id)
+             ->first();
+
+           $validate=Validator::make($request->all(),[
+            'name'    =>'required'  ,
+            'phone'   =>'required',
+            'email'   =>'required',
+            'quartier'=>'required'  ,
+            'password'=>'required'  ,
+            'username'=>'required'  ,
+         ]);
+
+          if($validate->fails()){
+             return  Response::json(['status'=>false,'message'=>$validate->getMessageBag()]);
+          }else{
+
+           $user->update([
+                'name'=>$request->name,
+                "phone"=>$request->phone,
+                "email"=>$request->email,
+                "quartier"=>$request->quartier,
+                "username"=>$request->username,
+                "company_id"=>$companyauth,
+                "password"=>Hash::make($request->password),
+             ]);
+             Mail::to($request->email)->send(new Info($user));
+
+             return Response::json(['status'=>true ,'message'=>'success']);
+
+          }
+
+        //code...
+       } catch (\Throwable $th) {
+        //throw $th;
+        return Response::json(['status'=>false ,'message'=>$th->getMessage()]);
+
+       }
+   }
+
+
+   public function get_user_person_with_auth_company(){
+             try {
+                $CompanyPerson=User::where('company_id',Auth::user()->id)->get();
+
+                return Response::json(['status'=>true,'CompanyPerson'=>$CompanyPerson]);
+             } catch (\Throwable $th) {
+                //throw $th;
+             return Response::json(['status'=>false ,'message'=>$th->getMessage()]);
+             }
+       }
+
+//
+   public function activ_desactive_user_person_company($id){
+       try {
+        //code...
+
+
+          $userperson =User::where('id',$id)->
+           where('company_id',Auth::user()->id)
+          ->first();
+
+          if ($userperson) {
+
+             if ($userperson->status==0) {
+                 # code...
+                  $userperson->status=1;
+                  $userperson->save();
+             return Helpers::response("activée",true);
+
+             } elseif ($userperson->status==1){
+                 $userperson->status=0;
+                 $userperson->save();
+              return Helpers::response("Désactivée",true);
+             }
+
+          }else{
+             return Helpers::response("error not found",false);
+
+         }
+       } catch (\Throwable $th) {
+        //throw $th;
+       }
+    }
 }

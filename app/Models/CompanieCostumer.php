@@ -23,7 +23,8 @@ class CompanieCostumer extends Authenticatable
         'email',
         'quartier',
         'company_id',
-        'identify'
+        'identify',
+        'person_company',
     ];
 
     public function company() {

@@ -3,20 +3,21 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CompanieController;
 use App\Http\Controllers\Api\Pubs\PubController;
 use App\Http\Controllers\Api\CarteEcomController;
 use App\Http\Controllers\Api\AuthanticedController;
+use App\Http\Controllers\Api\MobileMoneyController;
 use App\Http\Controllers\Api\Pubs\SliderController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\Mailsend\MailController;
 use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\Pubs\PartenaireController;
 use App\Http\Controllers\Api\CostumerCompanieController;
-use App\Http\Controllers\Api\HistoryController;
-use App\Http\Controllers\Api\MobileMoneyController;
 use App\Http\Controllers\Api\Promotions\PromotionController;
 use App\Http\Controllers\Api\Pageview\PageViewModelController;
 
@@ -35,6 +36,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+ //company person
+
+ Route::post('login/user/collect',[UserController::class,'login_user_collect']);
+
+ Route::post('logout/user/person',[UserController::class,'logout_user_person'])->middleware(['auth:sanctum']);
+ Route::post('create/costumer/by/person/company',[UserController::class,'create_costumer_by_person_company'])->middleware(['auth:sanctum']);
+
+ Route::post('update/costumer/by/person/company/{id}',[UserController::class,'update_costumer_by_person_company'])->middleware(['auth:sanctum']);
+
+ Route::get('get/costumer/by/person/company',[UserController::class,'get_costumer_by_person_compay_auth'])->middleware(['auth:sanctum']);
+
+ Route::get('user/person/company/history',[UserController::class,'user_person_company_history'])->middleware(['auth:sanctum']);
+
+ Route::post('createcart/by/user/person/company',[UserController::class,'createcart_by_user_person_company'])->middleware(['auth:sanctum']);
+
+
 //companie
 
 Route::post('/createcompany',[CompanieController::class,'createcompany']);
@@ -44,6 +61,15 @@ Route::delete('/Delete/company/{id}',[CompanieController::class,'Delete_company'
 Route::post('/logincompany',[CompanieController::class,'logincompany']);
 Route::post('/create/client/company',[CompanieController::class,'createClient'])->middleware(['auth:sanctum','abilities:companie']);
 Route::get('/get/client',[CompanieController::class,'getclient'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::post('/create/user/person',[CompanieController::class,'create_user_person'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::put('/update/person/{id}',[CompanieController::class,'update_user_person'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::get('get/user/person/with/auth/company',[CompanieController::class,'get_user_person_with_auth_company'])->middleware(['auth:sanctum','abilities:companie']);
+
+Route::get('active/desactive/user/person/company/{id}',[CompanieController::class,'activ_desactive_user_person_company'])->middleware(['auth:sanctum','abilities:companie']);
+
 Route::post('/change/Password/Company',[CompanieController::class,'changePasswordCompany'])->middleware(['auth:sanctum','abilities:companie']);
 Route::post('/upadate/company/{id}',[CompanieController::class,'upadatecompany'])->middleware(['auth:sanctum','abilities:companie']);
 
