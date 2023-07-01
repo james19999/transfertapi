@@ -25,6 +25,7 @@ class CompanieCostumer extends Authenticatable
         'company_id',
         'identify',
         'person_company',
+        'user_company',
     ];
 
     public function company() {

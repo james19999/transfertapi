@@ -125,7 +125,8 @@ class UserController extends Controller
                     'quartier'=>$request->quartier,
                     'company_id'=>$user,
                     'identify'=>$request->identify,
-                    'person_company'=>$user
+                    'person_company'=>$user,
+                    'user_company'=>Auth::user()->id
 
                    ]);
 
@@ -201,7 +202,9 @@ class UserController extends Controller
       public function get_costumer_by_person_compay_auth(){
 
            try {
-              $CompanieCostumer =CompanieCostumer::where('person_company',Auth::user()->id)->get();
+              $CompanieCostumer =CompanieCostumer::where('company_id',Auth::user()->company_id)->
+               where('user_company',Auth::user()->id)
+              ->get();
 
             return Response::json(['status'=>true,'CompanieCostumer'=>$CompanieCostumer]);
 
